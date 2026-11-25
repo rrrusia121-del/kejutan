@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kejutan Ulang Tahun</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Nunito:wght@400;700;800&display=swap">
+<style>
+:root{--bg:#fff1ee;--card:#fff;--ink:#4a2a3a;--soft:#8a6475;--pink:#e8588a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#2a1b26;--card:#3a2833;--ink:#ffeef3;--soft:#d9b8c6;--pink:#ff8fb0}}
+:root[data-theme="dark"]{--bg:#2a1b26;--card:#3a2833;--ink:#ffeef3;--soft:#d9b8c6;--pink:#ff8fb0}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--ink);font:400 16px/1.55 "Nunito",system-ui,sans-serif;overflow:hidden;touch-action:manipulation}
+.scene{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:calc(20px + env(safe-area-inset-top,0px)) 20px calc(20px + env(safe-area-inset-bottom,0px));overflow:hidden}
+.scene.on{display:flex}
+h1,h2{font-family:"Playfair Display",Georgia,serif;margin:0 0 10px;line-height:1.15}
+h1{font-size:clamp(1.9rem,8vw,2.8rem)}
+h2{font-size:clamp(1.3rem,5.5vw,1.8rem)}
+button.go{font:800 1rem "Nunito",system-ui,sans-serif;border:0;border-radius:999px;padding:13px 28px;background:var(--pink);color:#fff;cursor:pointer;margin-top:18px;box-shadow:0 8px 20px rgba(232,88,138,.35)}
+button:focus-visible{outline:3px solid #fff;outline-offset:3px;box-shadow:0 0 0 6px var(--pink)}
+#s0{background:radial-gradient(circle at 18% 28%,rgba(220,150,120,.4) 0 11%,transparent 12%),radial-gradient(circle at 74% 18%,rgba(240,150,170,.4) 0 8%,transparent 9%),radial-gradient(circle at 62% 72%,rgba(220,150,120,.3) 0 14%,transparent 15%),radial-gradient(circle at 25% 80%,rgba(240,150,170,.3) 0 9%,transparent 10%),#3b2420;color:#fff}
+#s0 p{max-width:30ch;opacity:.85}
+.duo{display:flex;gap:6px;justify-content:center;align-items:flex-end}
+.duo svg{width:96px;height:auto}
+#s1{background:linear-gradient(#3fa7ea,#a9d6f4 62%,#e3e6fb);justify-content:flex-start;touch-action:none;color:#4a2a3a}
+.cloud{position:absolute;background:#fff;border-radius:99px;filter:blur(2px);opacity:.9}
+.hill{position:absolute;bottom:-18%;height:46%;border-radius:50% 50% 0 0;background:linear-gradient(#53a043,#2f6f35)}
+.hud{position:absolute;top:calc(14px + env(safe-area-inset-top,0px));background:rgba(255,255,255,.75);padding:6px 18px;border-radius:99px;font-weight:800;backdrop-filter:blur(6px);z-index:3}
+.tip{position:absolute;top:calc(58px + env(safe-area-inset-top,0px));font-weight:700;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,.35);z-index:3;max-width:28ch}
+#cat{position:absolute;bottom:5%;left:0;width:84px;z-index:2;will-change:transform}
+#cat svg,.duo svg{display:block}
+.it{position:absolute;top:0;left:0;font-size:34px;line-height:1;will-change:transform;z-index:2}
+.done{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.35);z-index:4;font:700 1.5rem "Playfair Display",Georgia,serif;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.4)}
+.done span{font-size:96px}
+#s2,#s3{background:linear-gradient(#fff4ee,#ffe4ec)}
+#s2 h2,#s3 h2,#s2 p,#s3 p{color:#4a2a3a}
+#bq{font-size:110px;line-height:1;transition:transform 1.4s cubic-bezier(.2,.9,.3,1.2);margin:6px 0;filter:drop-shadow(0 10px 24px rgba(232,88,138,.4))}
+#cap{font:700 1.15rem "Nunito",system-ui,sans-serif;color:#c63d72;min-height:3.2em;max-width:28ch}
+#grid{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;width:min(92vw,360px);margin-top:10px}
+.cell{border:0;background:transparent;font-size:40px;line-height:1.1;padding:2px;cursor:pointer}
+.cell.env{font-size:26px}
+.cell.no{animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+#found{min-height:1.6em;font-weight:800;color:#c63d72;margin-top:8px}
+#s4{background:linear-gradient(#ffeef0,#ffd9e4);color:#4a2a3a}
+.letter{background:var(--card);color:var(--ink);border-radius:24px;padding:26px 24px;max-width:420px;max-height:78vh;overflow-y:auto;box-shadow:0 18px 44px rgba(120,40,70,.2);position:relative;z-index:2}
+.letter p{white-space:pre-line;text-align:left;margin:0 0 12px}
+.from{font:700 1.05rem "Playfair Display",Georgia,serif;color:var(--pink);text-align:right}
+.fl{position:fixed;bottom:-40px;pointer-events:none;animation:up linear infinite;z-index:1;opacity:.6}
+@keyframes up{to{transform:translateY(-115vh) rotate(40deg)}}
+.pop{animation:pop .5s}
+@keyframes pop{50%{transform:scale(1.25)}}
+@media (prefers-reduced-motion:reduce){.fl{display:none}#bq{transition:none}.pop,.cell.no{animation:none}}
+</style>
+</head>
+<body>
+
+<section class="scene on" id="s0">
+  <div class="duo" id="d0"></div>
+  <h1>Ada kejutan ulang tahun untukmu</h1>
+  <p>Siapkan jarimu. Ada permainan kecil sebelum surat dibuka.</p>
+  <button class="go" type="button" id="start">Buka kejutan</button>
+</section>
+
+<section class="scene" id="s1">
+  <div class="cloud" style="top:14%;left:8%;width:120px;height:34px"></div>
+  <div class="cloud" style="top:26%;right:6%;width:160px;height:40px"></div>
+  <div class="cloud" style="top:42%;left:30%;width:140px;height:34px"></div>
+  <div class="hill" style="left:-30%;width:90%"></div><div class="hill" style="right:-25%;width:95%"></div>
+  <div class="hud" id="hud"></div>
+  <div class="tip">Geser untuk menggerakkan monyet. Tangkap hati dan bunga.</div>
+  <div id="cat"></div>
+  <div class="done" id="done"><span>💐</span>Buket selesai dibuat</div>
+</section>
+
+<section class="scene" id="s2">
+  <div class="duo" id="d2"></div>
+  <div id="bq">💐</div>
+  <div id="cap" aria-live="polite"></div>
+  <button class="go" type="button" id="n2" hidden>Lanjut</button>
+</section>
+
+<section class="scene" id="s3">
+  <h2>Ada amplop spesial di antara si monyet dan sang putri</h2>
+  <p>Temukan amplopnya.</p>
+  <div id="grid"></div>
+  <div id="found" aria-live="polite"></div>
+</section>
+
+<section class="scene" id="s4">
+  <div class="letter">
+    <h2 id="ttl"></h2>
+    <p id="msg"></p>
+    <div class="from" id="frm"></div>
+    <button class="go" type="button" id="again">Main lagi</button>
+  </div>
+</section>
+
+<script>
+var NAMA='Sayang', DARI='Monyet', UMUR='';
+var PESAN='Terima kasih sudah ada di hari-hariku. Kamu bikin hal biasa jadi terasa istimewa.\n\nSemoga tahun ini penuh tawa, makanan enak, dan mimpi yang satu per satu jadi nyata. Aku bangga sama kamu, dan aku akan selalu ada di sisimu.';
+var $=function(i){return document.getElementById(i)};
+var calm=window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+function monkey(){return '<svg viewBox="0 0 100 110" aria-hidden="true"><g stroke="#4a2a1c" stroke-width="2.5"><ellipse cx="50" cy="98" rx="26" ry="13" fill="#a9714b"/><circle cx="14" cy="50" r="13" fill="#8a5a3c"/><circle cx="86" cy="50" r="13" fill="#8a5a3c"/><circle cx="50" cy="52" r="36" fill="#a9714b"/><ellipse cx="50" cy="60" rx="26" ry="22" fill="#f0d2a8"/></g><circle cx="14" cy="50" r="6" fill="#f0d2a8"/><circle cx="86" cy="50" r="6" fill="#f0d2a8"/><circle cx="40" cy="52" r="4" fill="#2b1a12"/><circle cx="60" cy="52" r="4" fill="#2b1a12"/><ellipse cx="50" cy="62" rx="4" ry="3" fill="#2b1a12"/><path d="M41 69 Q50 77 59 69" fill="none" stroke="#2b1a12" stroke-width="2.5" stroke-linecap="round"/><circle cx="32" cy="64" r="5" fill="#ff9db5" opacity=".6"/><circle cx="68" cy="64" r="5" fill="#ff9db5" opacity=".6"/></svg>'}
+function princess(){return '<svg viewBox="0 0 100 110" aria-hidden="true"><g stroke="#5a3a1c" stroke-width="2.5" stroke-linejoin="round"><path d="M18 110 L34 84 H66 L82 110Z" fill="#ff8fb8"/><ellipse cx="50" cy="56" rx="38" ry="40" fill="#f2c14e"/><circle cx="50" cy="58" r="29" fill="#ffe0cc"/><path d="M22 52 Q50 14 78 52 Q64 34 50 36 Q36 34 22 52Z" fill="#f2c14e"/><path d="M32 30 L37 12 L45 25 L50 8 L55 25 L63 12 L68 30Z" fill="#ffd34d"/></g><circle cx="50" cy="16" r="3" fill="#e8588a"/><circle cx="41" cy="60" r="3.8" fill="#2b1a12"/><circle cx="59" cy="60" r="3.8" fill="#2b1a12"/><path d="M43 71 Q50 77 57 71" fill="none" stroke="#2b1a12" stroke-width="2.5" stroke-linecap="round"/><circle cx="33" cy="68" r="5" fill="#ff9db5" opacity=".7"/><circle cx="67" cy="68" r="5" fill="#ff9db5" opacity=".7"/></svg>'}
+$('d0').innerHTML=monkey()+princess();$('d2').innerHTML=monkey()+princess();$('cat').innerHTML=monkey();
+
+function show(n){
+  document.querySelectorAll('.scene').forEach(function(s,i){s.classList.toggle('on',i===n)});
+  if(n!==4)document.querySelectorAll('.fl').forEach(function(e){e.remove()});
+  if(n===1)startGame();if(n===2)bouquet();if(n===3)hide();if(n===4)letter();
+}
+$('start').onclick=function(){show(1)};
+$('n2').onclick=function(){show(3)};
+$('again').onclick=function(){show(0)};
+
+/* Permainan menangkap */
+var G={h:0,f:0,x:0,items:[],run:false,last:0,sp:0};
+function hud(){$('hud').textContent='♥ '+G.h+'/5   💐 '+G.f+'/5'}
+function startGame(){
+  var st=$('s1');st.querySelectorAll('.it').forEach(function(e){e.remove()});
+  G.h=G.f=0;G.items=[];G.sp=0;G.x=st.clientWidth/2;$('done').style.display='none';hud();
+  G.run=true;G.last=performance.now();requestAnimationFrame(tick);
+}
+function spawn(W){
+  var need=[];if(G.h<5)need.push('♥');if(G.f<5)need.push('💐');
+  var t=need[Math.floor(Math.random()*need.length)];
+  var e=document.createElement('span');e.className='it';e.textContent=t;
+  var o={e:e,t:t,x:30+Math.random()*(W-60),y:-40,v:150+Math.random()*70};
+  if(t==='♥')e.style.color='#d8244f';
+  $('s1').appendChild(e);G.items.push(o);
+}
+function tick(now){
+  if(!G.run)return;
+  var st=$('s1'),W=st.clientWidth,H=st.clientHeight,dt=Math.min(.05,(now-G.last)/1000);G.last=now;
+  G.x=Math.max(42,Math.min(W-42,G.x));
+  $('cat').style.transform='translateX('+(G.x-42)+'px)';
+  G.sp-=dt;if(G.sp<=0){G.sp=.8;spawn(W)}
+  var top=H*.95-84;
+  for(var i=G.items.length-1;i>=0;i--){
+    var o=G.items[i];o.y+=o.v*dt;
+    o.e.style.transform='translate('+o.x+'px,'+o.y+'px)';
+    if(o.y>top-10&&o.y<top+50&&Math.abs(o.x-G.x)<50){
+      if(o.t==='♥')G.h++;else G.f++;
+      o.e.remove();G.items.splice(i,1);hud();
+      var c=$('cat').firstChild;c.classList.remove('pop');void c.offsetWidth;c.classList.add('pop');
+      if(G.h>=5&&G.f>=5){G.run=false;$('done').style.display='flex';setTimeout(function(){show(2)},2300);return}
+    }else if(o.y>H){o.e.remove();G.items.splice(i,1)}
+  }
+  requestAnimationFrame(tick);
+}
+$('s1').addEventListener('pointermove',function(e){G.x=e.clientX});
+$('s1').addEventListener('pointerdown',function(e){G.x=e.clientX});
+document.addEventListener('keydown',function(e){if(e.key==='ArrowLeft')G.x-=40;if(e.key==='ArrowRight')G.x+=40});
+
+/* Buket */
+function bouquet(){
+  var c=['Karena rasa sayang itu seperti buket bunga yang aku buat ♥','Makin deg-degan nih buketnya 💕','Buket ini spesial untuk kamu ♥'],i=0,b=$('bq');
+  $('n2').hidden=true;b.style.transform='scale(.5)';
+  (function step(){$('cap').textContent=c[i];b.style.transform='scale('+(.7+i*.35)+')';i++;
+    if(i<c.length)setTimeout(step,2300);else setTimeout(function(){$('n2').hidden=false},1500)})();
+}
+
+/* Cari amplop */
+function hide(){
+  var g=$('grid');g.innerHTML='';$('found').textContent='';
+  var N=40,k=Math.floor(Math.random()*N);
+  for(var i=0;i<N;i++){
+    var b=document.createElement('button');b.type='button';b.className='cell';
+    b.textContent=i===k?'✉️':(i%2?'👸':'🐵');
+    b.setAttribute('aria-label',i===k?'Amplop':(i%2?'Putri':'Monyet'));
+    b.style.transform='rotate('+Math.round(Math.random()*30-15)+'deg)';
+    if(i===k)b.classList.add('env');
+    b.onclick=(function(isEnv,btn){return function(){
+      if(isEnv){$('found').textContent='Wah, kamu menemukan amplopnya 💌';setTimeout(function(){show(4)},1500)}
+      else{btn.classList.remove('no');void btn.offsetWidth;btn.classList.add('no')}
+    }})(i===k,b);
+    g.appendChild(b);
+  }
+}
+
+/* Surat */
+function letter(){
+  $('ttl').textContent='Selamat ulang tahun, '+NAMA+'!'+(UMUR?' ('+UMUR+')':'');
+  $('msg').textContent=PESAN;$('frm').textContent='Dari '+DARI+' ♥';
+  if(calm||document.querySelector('.fl'))return;
+  for(var n=0;n<14;n++){var s=document.createElement('span');s.className='fl';s.textContent=['♥','🌸','✨','🎂'][n%4];
+    s.style.left=Math.random()*96+'vw';s.style.fontSize=(16+Math.random()*20)+'px';
+    s.style.animationDuration=(8+Math.random()*8)+'s';s.style.animationDelay=(-Math.random()*10)+'s';document.body.appendChild(s)}
+}
+</script>
+</body>
+</html>
